@@ -41,10 +41,10 @@ function AdminPage() {
     galleryImages: 0,
     testimonials: 0
   });
-  const [menuItems, setMenuItems] = useState([]);
-  const [reservations, setReservations] = useState([]);
-  const [gallery, setGallery] = useState([]);
-  const [testimonials, setTestimonials] = useState([]);
+  const [menuItems, setMenuItems] = useState<any[]>([]);
+  const [reservations, setReservations] = useState<any[]>([]);
+  const [gallery, setGallery] = useState<any[]>([]);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingItem, setEditingItem] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
