@@ -146,7 +146,7 @@ export function MenuSection() {
         >
           {filteredItems.map((item, index) => (
             <motion.div
-              key={item._id || item.id}
+              key={item._id ? String(item._id) : String(item.id)}
               layout
               initial={{ opacity: 0, y: 50 }}
               animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
