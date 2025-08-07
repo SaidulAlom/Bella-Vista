@@ -239,7 +239,7 @@ function Dashboard({ stats, reservations }: { stats: any, reservations: any[] })
   );
 }
 
-function MenuManager({ menuItems, setMenuItems }: { menuItems: any[], setMenuItems: (items: any[]) => void }) {
+function MenuManager({ menuItems, setMenuItems }: { menuItems: any[], setMenuItems: React.Dispatch<React.SetStateAction<any[]>> }) {
   const [editingItem, setEditingItem] = useState<any | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -411,7 +411,7 @@ function MenuManager({ menuItems, setMenuItems }: { menuItems: any[], setMenuIte
   );
 }
 
-function ReservationsManager({ reservations, setReservations }: { reservations: any[], setReservations: (reservations: any[]) => void }) {
+function ReservationsManager({ reservations, setReservations }: { reservations: any[], setReservations: React.Dispatch<React.SetStateAction<any[]>> }) {
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(false);
 
@@ -516,7 +516,7 @@ function ReservationsManager({ reservations, setReservations }: { reservations: 
   );
 }
 
-function GalleryManager({ gallery, setGallery }: { gallery: any[], setGallery: (gallery: any[]) => void }) {
+function GalleryManager({ gallery, setGallery }: { gallery: any[], setGallery: React.Dispatch<React.SetStateAction<any[]>> }) {
   const [showAddForm, setShowAddForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ title: '', url: '', alt: '' });
@@ -628,7 +628,7 @@ function GalleryManager({ gallery, setGallery }: { gallery: any[], setGallery: (
   );
 }
 
-function TestimonialsManager({ testimonials, setTestimonials }: { testimonials: any[], setTestimonials: (testimonials: any[]) => void }) {
+function TestimonialsManager({ testimonials, setTestimonials }: { testimonials: any[], setTestimonials: React.Dispatch<React.SetStateAction<any[]>> }) {
   const [showAddForm, setShowAddForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ name: '', rating: 5, comment: '' });
