@@ -72,7 +72,7 @@ function AdminPage() {
         setTestimonials(testimonialsData);
         setStats({
           totalReservations: reservationsData.length,
-          pendingReservations: reservationsData.filter(r => r.status === 'pending').length,
+          pendingReservations: reservationsData.filter((r: any) => r.status === 'pending').length,
           totalRevenue: menuData.reduce((sum, item) => sum + (item.price || 0), 0) * 10,
           menuItems: menuData.length,
           galleryImages: galleryData.length,
