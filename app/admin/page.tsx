@@ -131,7 +131,13 @@ function AdminPage() {
           </div>
         ) : (
           <>
-            {activeSection === 'dashboard' && <Dashboard stats={stats} reservations={reservations} />}
+            {activeSection === 'dashboard' && (
+              <Dashboard
+                stats={stats}
+                reservations={reservations}
+                setActiveSection={setActiveSection}
+              />
+            )}
             {activeSection === 'menu' && <MenuManager menuItems={menuItems} setMenuItems={setMenuItems} />}
             {activeSection === 'reservations' && <ReservationsManager reservations={reservations} setReservations={setReservations} />}
             {activeSection === 'gallery' && <GalleryManager gallery={gallery} setGallery={setGallery} />}
@@ -143,7 +149,7 @@ function AdminPage() {
   );
 }
 
-function Dashboard({ stats, reservations }: { stats: any, reservations: any[] }) {
+function Dashboard({ stats, reservations, setActiveSection }: { stats: any, reservations: any[], setActiveSection: (section: string) => void }) {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Dashboard</h1>
