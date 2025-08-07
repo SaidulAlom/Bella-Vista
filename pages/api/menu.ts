@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       description,
       available,
     });
-    return res.status(201).json(result.ops ? result.ops[0] : { _id: result.insertedId, name, category, price, description, available });
+    return res.status(201).json({ _id: result.insertedId, name, category, price: parseFloat(price), description, available });
   }
 
   if (req.method === 'PUT') {

@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       guests: parseInt(guests),
       status,
     });
-    return res.status(201).json(result.ops ? result.ops[0] : { _id: result.insertedId, name, email, date, time, guests, status });
+    return res.status(201).json({ _id: result.insertedId, name, email, date, time, guests: parseInt(guests), status });
   }
 
   if (req.method === 'PUT') {
