@@ -56,7 +56,7 @@ export function GallerySection() {
         if (Array.isArray(data) && data.length > 0) {
           setGalleryImages(data.map(img => ({
             ...img,
-            src: img.url || img.src,
+            src: img.url || img.image || img.src,
             alt: img.alt || '',
             id: img._id || img.id,
           })));
@@ -119,7 +119,7 @@ export function GallerySection() {
               onClick={() => openLightbox(image.id)}
             >
               <img
-                src={image.src}
+                src={image.src || 'https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop'}
                 alt={image.alt}
                 className={`w-full object-cover transition-transform duration-300 group-hover:scale-110 ${
                   index % 3 === 0 ? 'h-96' : 'h-64'

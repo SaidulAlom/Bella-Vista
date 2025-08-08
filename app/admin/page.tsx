@@ -249,7 +249,19 @@ function MenuManager({ menuItems, setMenuItems }: { menuItems: any[], setMenuIte
   const [editingItem, setEditingItem] = useState<any | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({ name: '', category: '', price: '', description: '', available: true });
+  const [formData, setFormData] = useState({ name: '', category: '', price: '', description: '', available: true, image: '' });
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        setFormData({ ...formData, image: result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -280,7 +292,7 @@ function MenuManager({ menuItems, setMenuItems }: { menuItems: any[], setMenuIte
         const newData = await newItem.json();
         setMenuItems([...menuItems, newData]);
       }
-      setFormData({ name: '', category: '', price: '', description: '', available: true });
+      setFormData({ name: '', category: '', price: '', description: '', available: true, image: '' });
       setShowAddForm(false);
     } catch (error) {
       console.error('Failed to save menu item:', error);
@@ -367,6 +379,20 @@ function MenuManager({ menuItems, setMenuItems }: { menuItems: any[], setMenuIte
                   required
                 />
               </div>
+              <div>
+                <label className="text-sm font-medium">Photo</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none transition-all duration-200"
+                />
+                {formData.image && (
+                  <div className="mt-2">
+                    <img src={formData.image} alt="Preview" className="w-32 h-32 object-cover rounded-lg" />
+                  </div>
+                )}
+              </div>
               <div className="flex gap-2">
                 <Button type="submit" disabled={loading}>
                   {loading ? 'Saving...' : (editingItem ? 'Update' : 'Add') + ' Item'}
@@ -374,7 +400,7 @@ function MenuManager({ menuItems, setMenuItems }: { menuItems: any[], setMenuIte
                 <Button type="button" variant="outline" onClick={() => {
                   setShowAddForm(false);
                   setEditingItem(null);
-                  setFormData({ name: '', category: '', price: '', description: '', available: true });
+                  setFormData({ name: '', category: '', price: '', description: '', available: true, image: '' });
                 }}>
                   Cancel
                 </Button>
@@ -389,16 +415,21 @@ function MenuManager({ menuItems, setMenuItems }: { menuItems: any[], setMenuIte
           <Card key={item._id}>
             <CardContent className="p-6">
               <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-semibold">{item.name}</h3>
-                    <Badge variant={item.available ? 'default' : 'secondary'}>
-                      {item.available ? 'Available' : 'Unavailable'}
-                    </Badge>
+                <div className="flex gap-4 flex-1">
+                  {item.image && (
+                    <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-lg" />
+                  )}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-lg font-semibold">{item.name}</h3>
+                      <Badge variant={item.available ? 'default' : 'secondary'}>
+                        {item.available ? 'Available' : 'Unavailable'}
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">{item.category}</p>
+                    <p className="text-sm mt-2">{item.description}</p>
+                    <p className="text-lg font-bold text-green-600 mt-2">${item.price}</p>
                   </div>
-                  <p className="text-sm text-muted-foreground mt-1">{item.category}</p>
-                  <p className="text-sm mt-2">{item.description}</p>
-                  <p className="text-lg font-bold text-green-600 mt-2">${item.price}</p>
                 </div>
                 <div className="flex gap-2">
                   <Button size="sm" variant="outline" onClick={() => handleEdit(item)}>
@@ -525,7 +556,19 @@ function ReservationsManager({ reservations, setReservations }: { reservations: 
 function GalleryManager({ gallery, setGallery }: { gallery: any[], setGallery: React.Dispatch<React.SetStateAction<any[]>> }) {
   const [showAddForm, setShowAddForm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({ title: '', url: '', alt: '' });
+  const [formData, setFormData] = useState({ title: '', url: '', alt: '', image: '' });
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        setFormData({ ...formData, image: result, url: result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -541,7 +584,7 @@ function GalleryManager({ gallery, setGallery }: { gallery: any[], setGallery: R
       });
       const newData = await newItem.json();
       setGallery([...gallery, newData]);
-      setFormData({ title: '', url: '', alt: '' });
+      setFormData({ title: '', url: '', alt: '', image: '' });
       setShowAddForm(false);
     } catch (error) {
       console.error('Failed to add gallery item:', error);
@@ -585,11 +628,24 @@ function GalleryManager({ gallery, setGallery }: { gallery: any[], setGallery: R
                 />
               </div>
               <div>
-                <label className="text-sm font-medium">Image URL</label>
+                <label className="text-sm font-medium">Upload Image</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none transition-all duration-200"
+                />
+                {formData.image && (
+                  <div className="mt-2">
+                    <img src={formData.image} alt="Preview" className="w-32 h-32 object-cover rounded-lg" />
+                  </div>
+                )}
+              </div>
+              <div>
+                <label className="text-sm font-medium">Or Image URL</label>
                 <Input
                   value={formData.url}
                   onChange={(e) => setFormData({...formData, url: e.target.value})}
-                  required
                 />
               </div>
               <div>
@@ -604,7 +660,10 @@ function GalleryManager({ gallery, setGallery }: { gallery: any[], setGallery: R
                 <Button type="submit" disabled={loading}>
                   {loading ? 'Adding...' : 'Add Image'}
                 </Button>
-                <Button type="button" variant="outline" onClick={() => setShowAddForm(false)}>
+                <Button type="button" variant="outline" onClick={() => {
+                  setShowAddForm(false);
+                  setFormData({ title: '', url: '', alt: '', image: '' });
+                }}>
                   Cancel
                 </Button>
               </div>
@@ -617,9 +676,13 @@ function GalleryManager({ gallery, setGallery }: { gallery: any[], setGallery: R
         {gallery.map((item) => (
           <Card key={item._id}>
             <CardContent className="p-4">
-              <div className="aspect-video bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
-                <span className="text-gray-500">Image Preview</span>
-              </div>
+              {(item.url || item.image) ? (
+                <img src={item.url || item.image} alt={item.alt} className="w-full aspect-video object-cover rounded-lg mb-4" />
+              ) : (
+                <div className="aspect-video bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                  <span className="text-gray-500">No Image</span>
+                </div>
+              )}
               <h3 className="font-semibold mb-2">{item.title}</h3>
               <p className="text-sm text-muted-foreground mb-3">{item.alt}</p>
               <Button size="sm" variant="destructive" onClick={() => handleDelete(item._id)}>
@@ -637,7 +700,19 @@ function GalleryManager({ gallery, setGallery }: { gallery: any[], setGallery: R
 function TestimonialsManager({ testimonials, setTestimonials }: { testimonials: any[], setTestimonials: React.Dispatch<React.SetStateAction<any[]>> }) {
   const [showAddForm, setShowAddForm] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({ name: '', rating: 5, comment: '' });
+  const [formData, setFormData] = useState({ name: '', rating: 5, comment: '', image: '' });
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        setFormData({ ...formData, image: result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -653,7 +728,7 @@ function TestimonialsManager({ testimonials, setTestimonials }: { testimonials: 
       });
       const newData = await newTestimonial.json();
       setTestimonials([...testimonials, newData]);
-      setFormData({ name: '', rating: 5, comment: '' });
+      setFormData({ name: '', rating: 5, comment: '', image: '' });
       setShowAddForm(false);
     } catch (error) {
       console.error('Failed to add testimonial:', error);
@@ -716,11 +791,28 @@ function TestimonialsManager({ testimonials, setTestimonials }: { testimonials: 
                   required
                 />
               </div>
+              <div>
+                <label className="text-sm font-medium">Profile Photo</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none transition-all duration-200"
+                />
+                {formData.image && (
+                  <div className="mt-2">
+                    <img src={formData.image} alt="Preview" className="w-16 h-16 object-cover rounded-full" />
+                  </div>
+                )}
+              </div>
               <div className="flex gap-2">
                 <Button type="submit" disabled={loading}>
                   {loading ? 'Adding...' : 'Add Testimonial'}
                 </Button>
-                <Button type="button" variant="outline" onClick={() => setShowAddForm(false)}>
+                <Button type="button" variant="outline" onClick={() => {
+                  setShowAddForm(false);
+                  setFormData({ name: '', rating: 5, comment: '', image: '' });
+                }}>
                   Cancel
                 </Button>
               </div>
@@ -734,19 +826,24 @@ function TestimonialsManager({ testimonials, setTestimonials }: { testimonials: 
           <Card key={testimonial._id}>
             <CardContent className="p-6">
               <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="font-semibold">{testimonial.name}</h3>
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <span key={i} className={i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'}>
-                          ★
-                        </span>
-                      ))}
+                <div className="flex gap-4 flex-1">
+                  {testimonial.image && (
+                    <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 object-cover rounded-full" />
+                  )}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="font-semibold">{testimonial.name}</h3>
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <span key={i} className={i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'}>
+                            ★
+                          </span>
+                        ))}
+                      </div>
                     </div>
+                    <p className="text-sm text-muted-foreground mb-2">{testimonial.date}</p>
+                    <p className="text-gray-700">{testimonial.comment}</p>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-2">{testimonial.date}</p>
-                  <p className="text-gray-700">{testimonial.comment}</p>
                 </div>
                 <Button size="sm" variant="destructive" onClick={() => handleDelete(testimonial._id)}>
                   <Trash2 className="h-4 w-4" />

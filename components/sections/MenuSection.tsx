@@ -156,7 +156,7 @@ export function MenuSection() {
             >
               <div className="relative overflow-hidden group">
                 <img
-                  src={item.image}
+                  src={item.image || 'https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop'}
                   alt={item.name}
                   className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
                 />

@@ -12,9 +12,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method === 'POST') {
-    const { title, url, alt } = req.body;
-    const result = await collection.insertOne({ title, url, alt });
-    return res.status(201).json({ _id: result.insertedId, title, url, alt });
+    const { title, url, alt, image } = req.body;
+    const result = await collection.insertOne({ title, url: url || image, alt, image });
+    return res.status(201).json({ _id: result.insertedId, title, url: url || image, alt, image });
   }
 
   if (req.method === 'PUT') {
